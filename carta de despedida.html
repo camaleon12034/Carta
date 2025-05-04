@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Kumi..</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .carta-container {
+      position: relative;
+      width: 300px;
+      height: 450px; 
+      text-align: center;
+      cursor: pointer;
+      perspective: 1000px;
+      filter: drop-shadow(0 15px 15px rgba(0,0,0,0.15));
+      transition: filter 0.3s ease;
+    }
+    .carta-container:hover {
+      filter: drop-shadow(0 20px 20px rgba(0,0,0,0.2));
+    }
+    .mensaje {
+      background: linear-gradient(to bottom, #fff 0%, #f9f9f9 100%);
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 25px 20px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 340px; 
+      box-sizing: border-box;
+      font-size: 16px; 
+      line-height: 1.6; 
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      z-index: 2;
+      pointer-events: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      overflow: auto; 
+      color: #444;
+    }
+    .mensaje::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: linear-gradient(to right, #FF6B6B, #FFD166, #06D6A0, #118AB2);
+      border-radius: 8px 8px 0 0;
+    }
+    .mensaje-contenido {
+      margin-top: 8px;
+    }
+    .mensaje-titulo {
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #222;
+      font-size: 20px;
+    }
+    .mensaje-firma {
+      font-style: italic;
+      text-align: right;
+      margin-top: 20px;
+      color: #666;
+    }
+    .carta-container.abierta .mensaje {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      transition-delay: 0.6s;
+    }
+    .sobre {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      transition: transform 0.7s ease;
+      z-index: 3;
+      transform-style: preserve-3d;
+      border-radius: 8px;
+    }
+    .sobre-cuerpo {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      bottom: 0;
+      z-index: 3;
+      border-radius: 0 0 8px 8px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .sobre-solapa {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #fad0c4 0%, #ff9a9e 100%);
+      clip-path: polygon(0 50%, 50% 0%, 100% 50%, 100% 100%, 0 100%);
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+      z-index: 4;
+    }
+    .sobre-solapa::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.1);
+      clip-path: polygon(0 50%, 50% 0%, 100% 50%, 50% 35%);
+    }
+    .carta-container.abierta .sobre-solapa {
+      transform: rotateX(-180deg);
+    }
+    .sobre-interior {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #f6d3e5 0%, #ffd1ff 100%);
+      clip-path: polygon(0 50%, 50% 0%, 100% 50%, 100% 100%, 0 100%);
+      z-index: 2;
+    }
+    .carta-container.abierta .sobre {
+      transform: translateY(120%);
+      transition-delay: 0.4s;
+    }
+    .sello {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #cc0000 100%);
+      border-radius: 50%;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+    .sello::before {
+      content: '♥';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 20px;
+    }
+    .carta-container.abierta .sello {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+    }
+    .floating-heart {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, #ff6b6b 0%, #cc0000 100%);
+      transform: rotate(45deg);
+      animation: floatUp 1.5s ease-out forwards;
+      z-index: 999;
+      opacity: 0.9;
+    }
+    .floating-heart::before,
+    .floating-heart::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: inherit;
+      border-radius: 50%;
+    }
+    .floating-heart::before {
+      top: -6px;
+      left: 0;
+    }
+    .floating-heart::after {
+      left: -6px;
+      top: 0;
+    }
+    @keyframes floatUp {
+      0% { opacity: 0.9; transform: translateY(0) rotate(45deg) scale(1); }
+      50% { opacity: 0.6; transform: translateY(-50px) rotate(45deg) scale(0.9); }
+      100% { opacity: 0; transform: translateY(-120px) rotate(45deg) scale(0.6); }
+    }
+    .carta-instruccion {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(0,0,0,0.5);
+      font-size: 12px;
+      white-space: nowrap;
+      background: rgba(255,255,255,0.7);
+      padding: 5px 10px;
+      border-radius: 15px;
+      opacity: 0.7;
+    }
+    .creator-signature {
+      position: fixed;
+      bottom: 5px;
+      right: 5px;
+      font-size: 10px;
+      color: rgba(0,0,0,0.4);
+      font-family: 'Segoe UI', sans-serif;
+      pointer-events: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div class="carta-container" id="carta">
+    <div class="mensaje">
+      <div class="mensaje-contenido">
+        <div class="mensaje-titulo">Kumi,</div>
+        me divertí mucho jugando contigo estos últimos días, pero parece que ya es todo lo que puedo hacer por ti.<br><br>
+        Ya hice lo que debía, ayudarte en lo más posible. En teoría, ya no me ocupas para nada más, ya sacaste al vsjw, no hay nada en lo que te pueda ayudar ahora<br><br>
+        Solamente tocará esperar la upd para volver a jugar juntos una ultima vez mas.<br><br>
+        Una vez que ya sepas que quiere bien tu corazon u/o ocupas ayuda en algo (cualquier cosa), me puede avisar y yo estare ahi para ayudarte.
+        <div class="mensaje-firma">de Camaleon para: Kumi</div>
+      </div>
+    </div>
+    <div class="sobre">
+      <div class="sobre-solapa"></div>
+      <div class="sobre-interior"></div>
+      <div class="sobre-cuerpo"></div>
+      <div class="sello"></div>
+    </div>
+    <div class="carta-instruccion">Haz clic para abrir</div>
+  </div>
+  <div class="creator-signature">Made by Lord</div>
+  <script>
+    const carta = document.getElementById('carta');
+    const instruccion = document.querySelector('.carta-instruccion');
+    
+    carta.addEventListener('click', () => {
+      carta.classList.toggle('abierta');
+      if (carta.classList.contains('abierta')) {
+        instruccion.style.opacity = '0';
+        setTimeout(() => {
+          instruccion.style.display = 'none';
+        }, 300);
+        
+       
+        for (let i = 0; i < 15; i++) {
+          setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+           
+            const randomX = carta.offsetLeft + Math.random() * carta.offsetWidth;
+            const randomY = carta.offsetTop + carta.offsetHeight * 0.6;
+            heart.style.left = `${randomX}px`;
+            heart.style.top = `${randomY}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+          }, i * 100);
+        }
+      } else {
+        instruccion.style.display = 'block';
+        setTimeout(() => {
+          instruccion.style.opacity = '0.7';
+        }, 10);
+      }
+    });
+    
+   
+    let lastHeartTime = 0;
+    document.body.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastHeartTime > 200) { 
+        lastHeartTime = now;
+        const heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.style.left = `${e.pageX}px`;
+        heart.style.top = `${e.pageY}px`;
+    
+        const size = 8 + Math.random() * 6;
+        heart.style.width = `${size}px`;
+        heart.style.height = `${size}px`;
+        heart.style.opacity = `${0.7 + Math.random() * 0.3}`;
+        
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1500);
+      }
+    });
+  </script>
+</body>
+</html>
