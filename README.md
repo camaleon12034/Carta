@@ -1,2 +1,0 @@
-# Carta
-especialmente para; kumi
