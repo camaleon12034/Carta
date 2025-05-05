@@ -105,6 +105,17 @@
       z-index: 3;
       border-radius: 0 0 8px 8px;
       border: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .sobre-texto {
+      color: #8b0000;
+      font-weight: bold;
+      font-size: 15px;
+      text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+      z-index: 5;
+      opacity: 0.9;
     }
     .sobre-solapa {
       position: absolute;
@@ -223,6 +234,26 @@
       pointer-events: none;
       z-index: 1000;
     }
+    .image-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .image-box {
+      width: 48%;
+      margin-bottom: 10px;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .image-caption {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -234,16 +265,29 @@
         Ya hice lo que debía, ayudarte en lo más posible. En teoría, ya no me ocupas para nada más, ya sacaste al vsjw, no hay nada en lo que te pueda ayudar ahora<br><br>
         Solamente tocará esperar la upd para volver a jugar juntos una ultima vez mas.<br><br>
         Una vez que ya sepas que quiere bien tu corazon u/o ocupas ayuda en algo (cualquier cosa), me puede avisar y yo estare ahi para ayudarte.
+        <br>btw, ira a tus femboys favoritos</br>
+        
+        <div class="image-container">
+          <div class="image-box">
+            <img src="https://rule34ai.art/wp-content/uploads/2023/08/Rimuru-Tempest-in-jack-o-pose.jpeg" alt="Rimuru placeholder" style="width:100%; height:auto;" />
+            <div class="image-caption"></div>
+          </div>
+          <div class="image-box">
+            <img src="https://i.pinimg.com/736x/4f/c9/38/4fc938a26a27f823ef07ec4f7b82bbdf.jpg" alt="Femboy placeholder" style="width:100%; height:auto;" />
+            <div class="image-caption"></div>
+          </div>
+        </div>
+        
         <div class="mensaje-firma">de Camaleon para: Kumi</div>
       </div>
     </div>
     <div class="sobre">
       <div class="sobre-solapa"></div>
       <div class="sobre-interior"></div>
-      <div class="sobre-cuerpo"></div>
+      <div class="sobre-cuerpo">
+      </div>
       <div class="sello"></div>
     </div>
-    <div class="carta-instruccion">Haz clic para abrir</div>
   </div>
   <div class="creator-signature">Made by Lord</div>
   <script>
